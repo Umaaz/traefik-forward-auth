@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 description: Helm Chart for Traefik Forward Auth
 home: https://github.com/Umaaz/traefik-forward-auth
 
