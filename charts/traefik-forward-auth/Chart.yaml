@@ -12,3 +12,8 @@ icon: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/chart/
 maintainers:
   - email: b.w.donnelly1@gmail.com
     name: Ben Donnelly
+
+dependencies:
+  - name: traefik
+    version: "v26.0.0"
+    repository: https://traefik.github.io/charts
