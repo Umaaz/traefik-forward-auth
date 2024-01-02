@@ -6,6 +6,9 @@ on:
     paths:
       - charts/**/*.*
 
+env:
+  CT_CONFIGFILE: ct.yaml
+
 jobs:
   helm-lint:
     runs-on: ubuntu-latest
