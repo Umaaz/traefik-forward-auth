@@ -1,4 +1,33 @@
-{{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the charts.
+Expand the name of the chart.
 */}}
+{{- define "tfa.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "tfa.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "tfa.labels" -}}
+helm.sh/chart: {{ include "tfa.chart" . }}
+{{ include "tfa.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "tfa.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "tfa.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

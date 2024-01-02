@@ -1,28 +1,131 @@
-#Namespace override. Defaults to kube-system
-#namespace: traefik
+## Lets you override the name used for this chart, will default to 'traefik-forward-auth'.
+nameOverride: ""
+## Lets you override the full name used by this chart.
+fullnameOverride: ""
+## Lets you set the namespace to use when deploying, or upgrading.
+namespace: "ingress"
 
-#Port override. Defaults to 80
-#port: 8080
+## General config that affect all parts of the chart
+global:
+  ## define the default image config for all containers
+  image:
+    ## The image registry e.g. docker.io or ghcr.io
+    registry: docker.io
+    ## The name of the docker image to use
+    repository: bendonnelly/traefik-forward-auth
+    ## The image tag to use, if not set will default to app version.
+    tag: null
+    ## The name of the secret to use to pull the image
+    ## - github-pull-secret
+    pullSecrets: [ ]
+    ## How and when the image should be pulled, if using a specific version such as '0.1.5' it
+    ## is recommended to use `IfNotPresent`, otherwise use `Always`.
+    pullPolicy: IfNotPresent
 
-service:
-  labels: {}
-  annotations: {}
+config:
+  logLevel: "info"
+  logFormat: "text"
+  # authHost: ""
+  # cookieDomain: ""
+  insecureCookie: "false"
+  cookieName: "_forward_auth"
+  csrfCookieName: "_forward_auth_csrf"
+  defaultAction: "auth"
+  defaultProvider: "google"
+  # domain: ""
+  lifetime: "43200"
+  # logoutRedirect: ""
+  matchWhitelistOrDomain: "false"
+  urlPath: "/_oauth"
+  # secret: ""
+  whitelist: [ ]
+  port: "4181"
+  provider: {}
+#    google:
+#      prompt: ""
+#      clientSecret: ""
+#      clientId: ""
+#    oidc:
+#      issuerUrl: ""
+#      clientId: ""
+#      clientSecret: ""
+#    generic:
+#      authUrl: ""
+#      tokenUrl: ""
+#      userUrl: ""
+#      clientId: ""
+#      clientSecret: ""
+#      scope: []
+#      tokenStyle: ""
+
 
 deployment:
-  labels: {}
-  annotations: {}
-  provider:
-#    google: false
-    oidc: true
-  issuer:
-    url: ENTER_URL_HERE
-  client:
-    id: ENTER_ID_HERE
-#    secret:
-#  secret:  
-  cookie:
-    insecure: true
-#    domain: ENTER_COOKIE_DOMAIN
-#  domain: ENTER_DOMAIN
-#  auth:
-#    host_url: ENTER_HERE 
+  ## How many replicas of to use
+  replicas: 1
+  ## Custom labels to add to the deployment
+  labels: { }
+  ## Custom annotations to add to the deployment
+  annotations: { }
+  ## Custom labels to add to the pod
+  podLabels: { }
+  ## Custom annotations to add to the pod
+  podAnnotations: { }
+  ## The update strategy to use when deploying new versions
+  updateStrategy: RollingUpdate
+  ## -- Environment variables to add, can be in the form of key values, using valueFrom or other kubernetes forms.
+  ## - name: SOME_ENV
+  ##   value: some-value
+  ## - name: SOME_KEY_IN_CONFIG
+  ##   valueFrom:
+  ##     configMapKeyRef:
+  ##       name: some-config
+  ##       key: KEY_IN_CONFIG
+  extraEnv: [ ]
+  ## -- Environment variables from secrets or configmaps to add to the pod
+  ## - configMapRef:
+  ##     name: some-config
+  extraEnvFrom: [ ]
+  ## Can be used to define the resource block of the pod.
+  ## resources:
+  ##   requests:
+  ##     mem: 32Gi
+  resources: { }
+  ## Can be used to define a security context for a pod.
+  ##  securityContext:
+  ##    runAsUser: 1000
+  ##    runAsGroup: 3000
+  ##    fsGroup: 2000
+  securityContext: { }
+  # -- Affinity for pod assignment. See: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: { }
+  # -- Node labels for pod assignment. See: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: { }
+  # -- Tolerations for pod assignment. See: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: [ ]
+  # -- Volumes to add
+  extraVolumes: [ ]
+
+service:
+  # Should we create the service - must be true if ingress is required
+  enabled: true
+  # The type of service to use
+  type: ClusterIP
+  # Custom annotations to apply to the service
+  annotations: { }
+  # Custom labels to apply to the service
+  labels: { }
+  port: 4181
+
+  ingress:
+    # -- Specified whether an IngressRoute should be created
+    enabled: false
+    host: tfa.example.com
+    # -- Specify the entry points for traefik
+    entryPoints:
+      - websecure
+    routes:
+      - match: Host(`{{ .Values.service.ingress.host }}`) && PathPrefix(`{{ .Values.config.urlPath }}`)
+        kind: Rule
+        services:
+          - name: '{{ include "tfa.name" . }}'
+            port: 4181

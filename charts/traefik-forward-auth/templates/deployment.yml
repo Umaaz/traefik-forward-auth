@@ -1,67 +1,59 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: traefik-forward-auth
+    {{- include "tfa.labels" . | nindent 4 }}
     {{- if .Values.deployment.labels }}
     {{ toYaml .Values.deployment.labels | indent 4}}
     {{- end }}
+  {{- if .Values.deployment.annotations }}
   annotations:
-    {{ toYaml .Values.deployment.annotations | indent 4 }}
-  name: traefik-forward-auth
-  namespace: {{ .Values.namespace | default "kube-system" }}
+    {{ toYaml .Values.deployment.annotations | indent 4}}
+  {{- end }}
+  name: {{ include "tfa.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      app: traefik-forward-auth
+      {{- include "tfa.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: traefik-forward-auth
+        {{- include "tfa.labels" . | nindent 8 }}
+        {{- if .Values.deployment.podLabels }}
+        {{ toYaml .Values.deployment.podLabels | indent 8}}
+        {{- end }}
+      {{- if .Values.deployment.podAnnotations }}
+      annotations:
+        {{ toYaml .Values.deployment.podAnnotations | indent 8}}
+      {{- end }}
     spec:
       containers:
-        - name: traefik-forward-auth
-          image: thomseddon/traefik-forward-auth
+        - name: {{ include "tfa.name" . }}
+          image: "{{.Values.global.image.registry}}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           ports:
-            - containerPort: 4181
+            - containerPort: {{.Values.config.port}}
               protocol: TCP
           env:
-            {{- if .Values.deployment.provider.google }}
-            - name: PROVIDERS_GOOGLE_CLIENT_ID
-            {{- else if .Values.deployment.provider.oidc }}
-            - name: DEFAULT_PROVIDER
-              value: oidc
-            - name: PROVIDERS_OIDC_ISSUER_URL
-              value: {{ .Values.deployment.issuer.url }}
-            - name: PROVIDERS_OIDC_CLIENT_ID
-            {{- end }} 
-              value: {{ .Values.deployment.client.id }}
-            {{- if .Values.deployment.provider.google }}
-            - name: PROVIDERS_GOOGLE_CLIENT_SECRET
-            {{- else if .Values.deployment.provider.oidc }}
-            - name: PROVIDERS_OIDC_CLIENT_SECRET
+            - name: CONFIG
+              value: /conf/config.ini
+            {{- if .Values.deployment.extraEnv}}
+              {{- with .Values.deployment.extraEnv }}
+                {{- toYaml . | nindent 10 }}
+              {{- end }}
             {{- end }}
-              valueFrom:
-                secretKeyRef:
-                  name: traefik-forward-auth-secrets
-                  key: CLIENT_SECRET
-            - name: SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: traefik-forward-auth-secrets
-                  key: SECRET
-            - name: INSECURE_COOKIE
-              value: {{ .Values.deployment.cookie.insecure | quote }}
-            - name: COOKIE_DOMAIN
-              value: {{ .Values.deployment.cookie.domain }}
-            - name: DOMAIN
-              value: {{ .Values.deployment.domain }}
-            {{- if .Values.deployment.auth }}
-            - name: AUTH_HOST
-              value: {{ .Values.deployment.auth.host_url }}
+          envFrom:
+            - secretRef:
+                name: {{ include "tfa.name" . }}
+            {{- with .Values.deployment.extraEnvFrom }}
+              {{- toYaml . | nindent 10 }}
             {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /conf
+              name: tfa-config
           livenessProbe:
             tcpSocket:
               port: 4181
@@ -70,3 +62,30 @@ spec:
             successThreshold: 1
             periodSeconds: 10
             timeoutSeconds: 2
+
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tfa-config
+          configMap:
+            name: {{ include "tfa.name" . }}
+            items:
+              - key: "config.ini"
+                path: "config.ini"
+
+  strategy:
+    type: {{.Values.deployment.updateStrategy}}

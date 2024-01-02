@@ -3,7 +3,7 @@ name: Generate Docs
 on:
   workflow_run:
     workflows:
-      - Release
+      - Release Charts
     types:
       - completed
   release:
