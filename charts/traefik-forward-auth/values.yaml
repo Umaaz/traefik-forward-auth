@@ -3,7 +3,7 @@ nameOverride: ""
 ## Lets you override the full name used by this chart.
 fullnameOverride: ""
 ## Lets you set the namespace to use when deploying, or upgrading.
-namespace: "ingress"
+namespace: ""
 
 ## General config that affect all parts of the chart
 global:
