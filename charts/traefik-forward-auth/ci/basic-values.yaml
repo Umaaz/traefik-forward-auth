@@ -10,4 +10,4 @@ middleware:
   enabled: true
 
 echo:
-  enabled: true
+  enabled: false
