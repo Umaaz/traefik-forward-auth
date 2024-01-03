@@ -213,5 +213,4 @@ echo:
 
 # traefik is a dependant chart for the CRDs, but we do not what to install it by default
 traefik:
-  deployment:
-    enabled: false
+  enabled: false
