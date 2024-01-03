@@ -38,6 +38,14 @@ spec:
               protocol: TCP
           args:
             - -text={{.Values.echo.text}}
+          livenessProbe:
+            tcpSocket:
+              port: 5678
+            initialDelaySeconds: 20
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
+            timeoutSeconds: 2
       {{- with .Values.echo.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
