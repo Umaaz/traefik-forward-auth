@@ -17,3 +17,4 @@ dependencies:
   - name: traefik
     version: "v26.0.0"
     repository: https://traefik.github.io/charts
+    alias: traefik

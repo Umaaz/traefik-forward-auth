@@ -210,3 +210,8 @@ echo:
           services:
             - name: '{{ include "tfa.name" . }}-echo'
               port: 5678
+
+# traefik is a dependant chart for the CRDs, but we do not what to install it by default
+traefik:
+  deployment:
+    enabled: false
