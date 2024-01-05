@@ -11,3 +11,8 @@ middleware:
 
 echo:
   enabled: false
+
+traefik:
+  enabled: true
+  deployment:
+    enabled: false
