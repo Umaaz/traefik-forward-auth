@@ -1,9 +1,0 @@
-# See https://github.com/helm/chart-testing#configuration
-validate-maintainers: false
-helm-extra-args: --timeout 900s
-remote: origin
-target-branch: master
-chart-dirs:
-  - charts
-chart-repos:
-  - traefik=https://traefik.github.io/charts

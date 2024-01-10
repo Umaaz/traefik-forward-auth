@@ -1,5 +1,0 @@
-***********************************************************************
-Welcome to Traefik Forward Auth (TFA)
-Chart version: {{ .Chart.Version }}
-TFA version: {{ .Chart.AppVersion }}
-***********************************************************************
