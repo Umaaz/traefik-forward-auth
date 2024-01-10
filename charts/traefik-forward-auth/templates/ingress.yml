@@ -1,0 +1,26 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "tfa.name" .}}
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
+spec:
+  entryPoints:
+    {{ .Values.service.ingress.entryPoints }}
+  routes:
+    {{- range .Values.service.ingress.routes }}
+    - match: {{ tpl .match $ }}
+      kind: Rule
+        {{- if .middlewares }}
+      middlewares: {{- with .middlewares }}
+          {{- toYaml . | nindent 6 }}
+        {{- end }}
+        {{- end }}
+      services:
+        {{- range .services }}
+        - name: {{ tpl (.name | toString) $ }}
+          port: {{ .port }}
+            {{- if .scheme }}
+          scheme: {{ .scheme }}
+            {{- end }}
+        {{- end }}
+    {{- end }}

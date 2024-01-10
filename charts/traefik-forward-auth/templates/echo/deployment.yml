@@ -1,0 +1,68 @@
+{{- if .Values.echo.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "tfa.labels" . | nindent 4 }}
+    {{- if .Values.echo.labels }}
+    {{ toYaml .Values.echo.labels | indent 4}}
+    {{- end }}
+  {{- if .Values.echo.annotations }}
+  annotations:
+    {{ toYaml .Values.echo.annotations | indent 4}}
+  {{- end }}
+  name: {{ include "tfa.name" . }}-echo
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.echo.replicas }}
+  selector:
+    matchLabels:
+      {{- include "tfa.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tfa.labels" . | nindent 8 }}
+        {{- if .Values.echo.podLabels }}
+          {{ toYaml .Values.echo.podLabels | indent 8}}
+        {{- end }}
+      {{- if .Values.echo.podAnnotations }}
+      annotations:
+        {{ toYaml .Values.echo.podAnnotations | indent 8}}
+      {{- end }}
+    spec:
+      containers:
+        - name: echo
+          image: "{{.Values.echo.image.registry}}/{{ .Values.echo.image.repository }}:{{ .Values.echo.image.tag }}"
+          ports:
+            - containerPort: 5678
+              protocol: TCP
+          args:
+            - -text={{.Values.echo.text}}
+          livenessProbe:
+            tcpSocket:
+              port: 5678
+            initialDelaySeconds: 20
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
+            timeoutSeconds: 2
+      {{- with .Values.echo.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.echo.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.echo.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.echo.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+  strategy:
+    type: {{.Values.echo.updateStrategy}}
+{{- end}}

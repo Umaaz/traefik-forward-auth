@@ -5,6 +5,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    paths:
+      - /**/*.go
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -61,7 +63,7 @@ jobs:
       - name: Vendor
         run: go mod vendor
 
-      - name: Build Deep
+      - name: Build
         run: make build
 
   lint:

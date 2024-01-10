@@ -1,0 +1,23 @@
+{{- if .Values.echo.enabled }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "tfa.name" . }}-echo
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
+  labels:
+    {{- include "tfa.labels" . | nindent 4 }}
+    {{- if .Values.echo.service.labels }}
+      {{ toYaml .Values.echo.service.labels | indent 4}}
+    {{- end }}
+  {{- if .Values.echo.service.annotations }}
+  annotations:
+    {{ toYaml .Values.echo.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  selector:
+    {{- include "tfa.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: 5678
+      targetPort: 5678
+      protocol: TCP
+{{- end}}
