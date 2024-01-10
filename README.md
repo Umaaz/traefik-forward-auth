@@ -1,4 +1,4 @@
-![Deep Release](https://img.shields.io/github/v/release/intergral/deep-helm?filter=deep-1*)
+![Deep Release](https://img.shields.io/github/v/release/umaaz/traefik-forward-auth?filter=traefik-forward-auth*)
 
 # Traefik Forward Auth Helm Charts
 
