@@ -19,7 +19,7 @@ You can then run `helm search repo traefik` to see the charts.
 # Docs
 The docs for the chart are linked below:
 
-- [traefik forward auth](https://intergral.github.io/traefik-forward-auth/traefik-forward-auth/)
+- [traefik forward auth](https://umaaz.github.io/traefik-forward-auth/traefik-forward-auth/)
 
 # License
 
