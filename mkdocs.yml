@@ -10,8 +10,8 @@ site_url: https://umaaz.github.io/traefik-forward-auth/
 copyright: Intergral GmbH 2023
 
 theme:
-  logo: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/chart/traefik-forward-auth/treafik.logo.png
-  favicon: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/chart/traefik-forward-auth/treafik.logo.png
+  logo: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/charts/traefik-forward-auth/treafik.logo.png
+  favicon: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/charts/traefik-forward-auth/treafik.logo.png
   name: material
   features:
     - content.code.copy
