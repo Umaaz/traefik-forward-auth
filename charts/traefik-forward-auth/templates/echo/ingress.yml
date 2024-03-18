@@ -26,4 +26,8 @@ spec:
             {{- end }}
         {{- end }}
     {{- end }}
+  {{- if .Values.echo.service.ingress.tls }}
+  tls: {{ .Values.echo.service.ingress.tls }}
+  {{- end }}
+
 {{- end}}
