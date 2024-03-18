@@ -58,6 +58,10 @@ config:
 #      scope: []
 #      tokenStyle: ""
 
+secret:
+  # Use external Secret
+  external: false
+  name: "{{ include \"tfa.name\" . }}"
 
 deployment:
   ## How many replicas of to use
