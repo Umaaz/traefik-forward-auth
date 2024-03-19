@@ -24,3 +24,6 @@ spec:
             {{- end }}
         {{- end }}
     {{- end }}
+  {{- if .Values.service.ingress.tls }}
+  tls: {{ .Values.service.ingress.tls }}
+  {{- end }}
