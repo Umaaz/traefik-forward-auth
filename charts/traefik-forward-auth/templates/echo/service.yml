@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 spec:
   selector:
-    {{- include "tfa.selectorLabels" . | nindent 4 }}
+    {{- include "tfa.selectorLabelsEcho" . | nindent 4 }}
   ports:
     - port: 5678
       targetPort: 5678
