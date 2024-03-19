@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    {{- include "tfa.labels" . | nindent 4 }}
+    {{- include "tfa.labelsEcho" . | nindent 4 }}
     {{- if .Values.echo.labels }}
     {{ toYaml .Values.echo.labels | indent 4}}
     {{- end }}
@@ -17,7 +17,7 @@ spec:
   replicas: {{ .Values.echo.replicas }}
   selector:
     matchLabels:
-      {{- include "tfa.selectorLabels" . | nindent 6 }}
+      {{- include "tfa.selectorLabelsEcho" . | nindent 6 }}
   template:
     metadata:
       labels:

@@ -2,7 +2,9 @@
 Expand the name of the chart.
 */}}
 {{- define "tfa.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $suffix := default "" .Suffix }}
+{{- printf "%s-%s" $name $suffix | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -16,6 +18,13 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "tfa.labels" -}}
+{{ include "tfa._labels" (merge (dict "Suffix" "") .) }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "tfa._labels" -}}
 helm.sh/chart: {{ include "tfa.chart" . }}
 {{ include "tfa.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
