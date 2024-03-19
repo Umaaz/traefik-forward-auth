@@ -3,6 +3,28 @@ entries:
   traefik-forward-auth:
   - apiVersion: v2
     appVersion: 2.3.0
+    created: "2024-03-19T13:45:47.605753364Z"
+    dependencies:
+    - alias: traefik
+      condition: traefik.enabled
+      name: traefik
+      repository: https://traefik.github.io/charts
+      version: v26.0.0
+    description: Helm Chart for Traefik Forward Auth
+    digest: a0dffc6b67cf7c519b5d7a4930efa5b420e9f5f27df5e6363f3b2664ab1077cf
+    home: https://github.com/Umaaz/traefik-forward-auth
+    icon: https://raw.githubusercontent.com/Umaaz/traefik-forward-auth/master/chart/traefik-forward-auth/treafik.logo.png
+    maintainers:
+    - email: b.w.donnelly1@gmail.com
+      name: Ben Donnelly
+    name: traefik-forward-auth
+    sources:
+    - https://github.com/Umaaz/traefik-forward-auth
+    urls:
+    - https://github.com/Umaaz/traefik-forward-auth/releases/download/traefik-forward-auth-0.0.6/traefik-forward-auth-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 2.3.0
     created: "2024-03-19T11:51:49.053533132Z"
     dependencies:
     - alias: traefik
@@ -89,4 +111,4 @@ entries:
     urls:
     - https://github.com/Umaaz/traefik-forward-auth/releases/download/traefik-forward-auth-0.0.2/traefik-forward-auth-0.0.2.tgz
     version: 0.0.2
-generated: "2024-03-19T11:51:49.053549111Z"
+generated: "2024-03-19T13:45:47.605771177Z"
