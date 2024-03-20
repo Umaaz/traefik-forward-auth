@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "tfa.labels" . | nindent 8 }}
+        {{- include "tfa.labelsEcho" . | nindent 8 }}
         {{- if .Values.echo.podLabels }}
           {{ toYaml .Values.echo.podLabels | indent 8}}
         {{- end }}
