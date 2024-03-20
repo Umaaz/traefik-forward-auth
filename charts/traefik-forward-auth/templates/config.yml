@@ -9,10 +9,10 @@ data:
   config.ini: |
       log-level="{{- .Values.config.logLevel -}}"
       log-format="{{- .Values.config.logFormat -}}"
-      {{- if.Values.config.authHost  -}}
+      {{ if.Values.config.authHost  -}}
       auth-host="{{- .Values.config.authHost -}}"
       {{- end }}
-      {{- if .Values.config.cookieDomain -}}
+      {{ if .Values.config.cookieDomain -}}
       cookie-domain="{{- .Values.config.cookieDomain -}}"
       {{- end }}
       insecure-cookie="{{- .Values.config.insecureCookie -}}"
@@ -20,38 +20,58 @@ data:
       csrf-cookie-name="{{- .Values.config.csrfCookieName -}}"
       default-action="{{- .Values.config.defaultAction -}}"
       default-provider="{{- .Values.config.defaultProvider -}}"
-      {{- if .Values.config.domain -}}
+      {{ if .Values.config.domain -}}
       domain="{{- .Values.config.domain -}}"
       {{- end }}
       lifetime="{{- .Values.config.lifetime -}}"
-      {{- if .Values.config.logoutRedirect -}}
+      {{ if .Values.config.logoutRedirect -}}
       logout-redirect="{{- .Values.config.logoutRedirect -}}"
       {{- end }}
       match-whitelist-or-domain="{{- .Values.config.matchWhitelistOrDomain -}}"
       url-path="{{- .Values.config.urlPath -}}"
-      {{- if .Values.config.whitelist -}}
+      {{ if .Values.config.whitelist -}}
       whitelist="{{- .Values.config.whitelist | join "," -}}"
       {{- end }}
       port="{{- .Values.config.port -}}"
       {{ if .Values.config.provider.google -}}
       {{ with .Values.config.provider.google -}}
+      {{ if .clientId}}
       providers.google.client-id="{{- .clientId }}"
+      {{- end }}
+      {{ if .prompt}}
       providers.google.prompt="{{- .prompt }}"
+      {{- end }}
       {{- end }}
       {{- end}}
       {{ if .Values.config.provider.oidc -}}
       {{ with .Values.config.provider.oidc -}}
+      {{ if .clientId}}
       providers.oidc.client-id="{{- .clientId }}"
+      {{- end }}
+      {{ if .issuerUrl}}
       providers.oidc.issuer-url="{{- .issuerUrl }}"
+      {{- end }}
       {{- end }}
       {{- end}}
       {{ if .Values.config.provider.generic -}}
       {{ with .Values.config.provider.generic -}}
+      {{ if .authUrl}}
       providers.generic-oauth.auth-url="{{- .authUrl }}"
+      {{- end }}
+      {{ if .tokenUrl}}
       providers.generic-oauth.token-url="{{- .tokenUrl }}"
+      {{- end }}
+      {{ if .userUrl}}
       providers.generic-oauth.user-url="{{- .userUrl }}"
+      {{- end }}
+      {{ if .clientId}}
       providers.generic-oauth.client-id="{{- .clientId }}"
+      {{- end }}
+      {{ if .scope}}
       providers.generic-oauth.scope="{{- .scope | join "," }}"
+      {{- end }}
+      {{ if .tokenStyle}}
       providers.generic-oauth.token-style="{{- .tokenStyle }}"
+      {{- end }}
       {{- end }}
       {{- end}}
