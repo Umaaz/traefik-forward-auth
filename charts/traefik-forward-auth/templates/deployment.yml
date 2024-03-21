@@ -4,11 +4,11 @@ metadata:
   labels:
     {{- include "tfa.labels" . | nindent 4 }}
     {{- if .Values.deployment.labels }}
-    {{ toYaml .Values.deployment.labels | indent 4}}
+    {{ toYaml .Values.deployment.labels | nindent 4}}
     {{- end }}
   {{- if .Values.deployment.annotations }}
   annotations:
-    {{ toYaml .Values.deployment.annotations | indent 4}}
+    {{ toYaml .Values.deployment.annotations | nindent 4}}
   {{- end }}
   name: {{ include "tfa.name" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
@@ -22,11 +22,11 @@ spec:
       labels:
         {{- include "tfa.labels" . | nindent 8 }}
         {{- if .Values.deployment.podLabels }}
-        {{ toYaml .Values.deployment.podLabels | indent 8}}
+        {{ toYaml .Values.deployment.podLabels | nindent 8}}
         {{- end }}
       {{- if .Values.deployment.podAnnotations }}
       annotations:
-        {{ toYaml .Values.deployment.podAnnotations | indent 8}}
+        {{ toYaml .Values.deployment.podAnnotations | nindent 8}}
       {{- end }}
     spec:
       containers:
