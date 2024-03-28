@@ -1,5 +1,5 @@
 {{ if .Values.middleware.enabled }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: {{ .Values.traefik.apiVersion }}
 kind: Middleware
 metadata:
   name: {{ include "tfa.name" . }}
