@@ -217,4 +217,5 @@ echo:
 
 # traefik is a dependant chart for the CRDs, but we do not what to install it by default
 traefik:
+  apiVersion: traefik.io/v1alpha1
   enabled: false

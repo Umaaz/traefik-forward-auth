@@ -3,7 +3,7 @@ description: Helm Chart for Traefik Forward Auth
 home: https://github.com/Umaaz/traefik-forward-auth
 
 name: traefik-forward-auth
-version: 0.0.9
+version: 0.0.10
 appVersion: 2.3.0
 
 sources:
