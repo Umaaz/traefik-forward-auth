@@ -125,7 +125,11 @@ func ValidateDomains(email string, domains CommaSeparatedList) bool {
 
 // Get the redirect base
 func redirectBase(r *http.Request) string {
-	return fmt.Sprintf("%s://%s", r.Header.Get("X-Forwarded-Proto"), r.Host)
+	hostHeader := r.Header.Get("X-Forwarded-Host")
+	if hostHeader == "" {
+		hostHeader = r.Host
+	}
+	return fmt.Sprintf("%s://%s", r.Header.Get("X-Forwarded-Proto"), hostHeader)
 }
 
 // Return url
